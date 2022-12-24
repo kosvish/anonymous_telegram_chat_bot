@@ -14,6 +14,10 @@ class Database:
         with self.connection:
             return self.cursor.execute("DELETE FROM `queue` WHERE `chat_id` = ?", (chat_id,))
 
+    def delete_chat(self, id_chat):
+        with self.connection:
+            return self.cursor.execute("DELETE FROM `chats` WHERE `id` = ?", (id_chat,))
+
     def get_chat(self):
         with self.connection:
             chat = self.cursor.execute("SELECT * FROM `queue`", ()).fetchmany(1)
@@ -55,5 +59,3 @@ class Database:
 
             else:
                 return chat_info
-
-

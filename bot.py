@@ -30,6 +30,21 @@ def menu(message):
     bot.send_message(message.chat.id, 'Меню'.format(message.from_user), reply_markup=markup)
 
 
+@bot.message_handler(commands=['stop'])
+def stop(message):
+    chat_info = db.get_active_chat(message.chat.id)
+    if chat_info:
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        item1 = types.KeyboardButton('Поиск собеседника')
+        markup.add(item1)
+
+        bot.send_message(chat_info[1], 'Собеседник вышел из чата', reply_markup=markup)
+        bot.send_message(message.chat.id, 'Вы вышли из чата', reply_markup=markup)
+
+    else:
+        bot.send_message(message.chat.id, 'Вы не начали чат!', reply_markup=markup)
+
+
 @bot.message_handler(content_types=['text'])
 def bot_message(message):
     if message.chat.type == 'private':

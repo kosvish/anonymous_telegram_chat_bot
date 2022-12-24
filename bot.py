@@ -1,6 +1,9 @@
 import config
 import telebot
 from telebot import types
+from database import Database
+
+db = Database('db.db')
 
 bot = telebot.TeleBot(config.TOKEN)
 
@@ -34,6 +37,10 @@ def bot_message(message):
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             item1 = types.KeyboardButton('Остановить поиск')
             markup.add(item1)
+
+            db.add_queue(message.chat.id)
+
+            bot.send_message(message.chat.id, 'Поиск собеседника...', reply_markup=markup)
 
 
 bot.polling(none_stop=True)

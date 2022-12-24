@@ -40,9 +40,9 @@ def bot_message(message):
 
             chat_two = db.get_chat()  # получаем собеседника, который стоит в очереди первым
 
-            db.add_queue(message.chat.id)
-
-            bot.send_message(message.chat.id, 'Поиск собеседника...', reply_markup=markup)
+            if not db.create_chat(message.chat.id, chat_two):
+                db.add_queue(message.chat.id)
+                bot.send_message(message.chat.id, 'Поиск собеседника...', reply_markup=markup)
 
         elif message.text == 'Остановить поиск':
             db.delete_queue(message.chat.id)

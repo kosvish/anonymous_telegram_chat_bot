@@ -43,6 +43,14 @@ def bot_message(message):
             if not db.create_chat(message.chat.id, chat_two):
                 db.add_queue(message.chat.id)
                 bot.send_message(message.chat.id, 'Поиск собеседника...', reply_markup=markup)
+            else:
+                mess = 'Собеседник найден! Чтобы остановить диалог, напишите /stop'
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                item1 = types.KeyboardButton('/stop')
+                markup.add(item1)
+
+                bot.send_message(message.chat.id, mess, reply_markup=markup)
+                bot.send_message(chat_two, mess, reply_markup=markup)
 
         elif message.text == 'Остановить поиск':
             db.delete_queue(message.chat.id)

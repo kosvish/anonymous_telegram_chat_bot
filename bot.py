@@ -18,9 +18,22 @@ def start(message):
         reply_markup=markup)
 
 
+@bot.message_handler(commands=['menu'])
+def menu(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item1 = types.KeyboardButton('Поиск собеседника')
+    markup.add(item1)
+
+    bot.send_message(message.chat.id, 'Меню'.format(message.from_user), reply_markup=markup)
+
+
 @bot.message_handler(content_types=['text'])
 def bot_message(message):
-    bot.send_message(message.chat.id, message.text)
+    if message.chat.type == 'private':
+        if message.text == 'Поиск собеседника':
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            item1 = types.KeyboardButton('Остановить поиск')
+            markup.add(item1)
 
 
 bot.polling(none_stop=True)

@@ -34,6 +34,7 @@ def menu(message):
 def stop(message):
     chat_info = db.get_active_chat(message.chat.id)
     if chat_info:
+        db.delete_chat(chat_info[0])
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         item1 = types.KeyboardButton('Поиск собеседника')
         markup.add(item1)

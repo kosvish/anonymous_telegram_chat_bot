@@ -13,3 +13,13 @@ class Database:
     def delete_queue(self, chat_id):
         with self.connection:
             return self.cursor.execute("DELETE FROM `queue` WHERE `chat_id` = ?", (chat_id,))
+
+    def get_chat(self):
+        with self.connection:
+            chat = self.cursor.execute("SELECT * FROM `queue`", ()).fetchmany(1)
+            if bool(len(chat)):
+                for row in chat:
+                    return row[1]
+            else:
+                return False
+

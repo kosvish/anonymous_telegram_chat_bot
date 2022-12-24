@@ -23,3 +23,13 @@ class Database:
             else:
                 return False
 
+    def create_chat(self, chat_one, chat_two):
+        with self.connection:
+            if chat_two != 0:
+                # Создание чата
+                self.cursor.execute("DELETE FROM `queue` WHERE `chat_id` = ?", (chat_two,))
+                self.cursor.execute("INSERT INTO `chats` (`chat_one`, `chat_two`) VALUES (?,?)", (chat_one, chat_two,))
+                return True
+            else:
+                # Становимся в очередь
+                return False

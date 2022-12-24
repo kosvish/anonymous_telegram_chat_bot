@@ -33,3 +33,27 @@ class Database:
             else:
                 # Становимся в очередь
                 return False
+
+    def get_active_chat(self, chat_id):
+        with self.connection:
+            chat = self.cursor.execute("SELECT * FROM `chats` WHERE `chat_one` = ?", (chat_id,))
+            id_chat = 0
+            for row in chat:
+                id_chat = row[0]
+                chat_info = [row[0], row[2]]
+
+            if id_chat == 0:
+                chat = self.cursor.execute("SELECT * FROM `chats` WHERE `chat_two` = ?", (chat_id,))
+                for row in chat:
+                    id_chat = row[0]
+                    chat_info = [row[0], row[1]]
+
+                if id_chat == 0:
+                    return False
+                else:
+                    return chat_info
+
+            else:
+                return chat_info
+
+

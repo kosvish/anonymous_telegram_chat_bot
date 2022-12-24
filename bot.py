@@ -42,5 +42,9 @@ def bot_message(message):
 
             bot.send_message(message.chat.id, 'Поиск собеседника...', reply_markup=markup)
 
+        elif message.text == 'Остановить поиск':
+            db.delete_queue(message.chat.id)
+            bot.send_message(message.chat.id, 'Поиск остановлен, напишите /menu')
+
 
 bot.polling(none_stop=True)

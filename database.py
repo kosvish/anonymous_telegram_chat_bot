@@ -18,6 +18,7 @@ class Database:
         with self.connection:
             return self.cursor.execute("DELETE FROM `chats` WHERE `id` = ?", (id_chat,))
 
+    # Создание гендера при его отсутствии в БД
     def set_gender(self, chat_id, gender):
         with self.connection:
             user = self.cursor.execute("SELECT * FROM `users` WHERE `chat_id` = ?", (chat_id,)).fetchmany(1)
@@ -27,6 +28,7 @@ class Database:
             else:
                 return False
 
+    # Получение гендера если он присутствует у пользователя
     def get_gender(self, chat_id):
         with self.connection:
             user = self.cursor.execute("SELECT * FROM `users` WHERE `chat_id` = ?", (chat_id,)).fetchmany(1)
@@ -36,16 +38,26 @@ class Database:
             else:
                 return False
 
-
+    # Нахождение человека по определённому полу в нашей БД
+    def get_gender_chat(self, gender):
+        with self.connection:
+            chat = self.cursor.execute("SELECT * FROM `queue` WHERE `gender` = ?", (gender,)).fetchmany(1)
+            if bool(len(chat)):
+                for row in chat:
+                    user_info = [row[1], row[2]]
+                    return user_info
+            else:
+                return [0]
 
     def get_chat(self):
         with self.connection:
             chat = self.cursor.execute("SELECT * FROM `queue`", ()).fetchmany(1)
             if bool(len(chat)):
                 for row in chat:
-                    return row[1]
+                    user_info = [row[1], row[2]]
+                    return user_info
             else:
-                return False
+                return [0]
 
     def create_chat(self, chat_one, chat_two):
         with self.connection:
